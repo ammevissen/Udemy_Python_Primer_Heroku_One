@@ -1,3 +1,6 @@
+import os
+import re
+
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -9,7 +12,13 @@ from resources.store import Store, StoreList
 
 
 app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///data.db' #could be other types such as postgres
+
+uri=os.environ.get('DATABASE_ULR', 'sqlite:///data.db') #Try DATABASE_URL as environment variable first, if that fails (which it will locally), use sqlite)
+
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI']=uri #could be other types such as postgres.  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False #turns off Flask Alchemy tracker, but not the SQLAlchemy tracker (which is the better of the two) 
 app.secret_key='jose' #if this was production code, would need this to be in a secure location (seperate)
 api=Api(app)
