@@ -13,7 +13,7 @@ from resources.store import Store, StoreList
 
 app=Flask(__name__)
 
-uri=os.getenv('DATABASE_ULR', 'sqlite:///data.db') #Try DATABASE_URL as environment variable first, if that fails (which it will locally), use sqlite)
+uri=os.getenv('DATABASE_ULR')#, 'sqlite:///data.db') #Try DATABASE_URL as environment variable first, if that fails (which it will locally), use sqlite)
 
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
